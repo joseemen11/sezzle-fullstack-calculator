@@ -22,7 +22,7 @@ Sezzle explicitly permits AI-assisted development and requests the prompts used.
 | 01 | Requirements and architecture | Approved — 2026-10-08 |
 | 02 | Go backend and tests | Approved — 2026-10-08 |
 | 03 | React frontend and tests | Approved — 2026-10-08 |
-| 04 | Integration, review, docs and submission | Not started |
+| 04 | Integration, review, docs and submission | Audit complete — awaiting candidate approval |
 
 ---
 
@@ -1505,3 +1505,789 @@ The build and tests passed on Windows, but the final documentation must specify 
 Phase 03 is approved based on successful build, automated tests, and candidate-reported browser verification.
 
 The original prompts, follow-up instructions, and AI execution results remain preserved.
+
+---
+
+## Phase 04 — Final Audit, Documentation and Submission Preparation
+
+**Date:** 2026-10-08  
+**Tool:** OpenAI Codex  
+**Status:** AUDIT COMPLETE — Awaiting candidate approval  
+**Scope:** Final engineering audit, documentation and submission readiness.
+
+### Original prompt (verbatim)
+
+```text
+You are acting as a senior full-stack engineer and technical reviewer performing the final quality audit of my Sezzle take-home assessment.
+
+Read:
+- ASSIGNMENT.md
+- PROMPTS.md
+- All relevant Go source and tests
+- All relevant React/TypeScript source and tests
+- package.json and package-lock.json
+- Go module configuration
+- Git status and .gitignore
+
+CONTEXT
+
+Phase 01: architecture approved.
+Phase 02: Go backend implemented, tested and verified.
+Phase 03: React frontend implemented, tested and verified.
+
+The candidate independently verified:
+
+BACKEND:
+- go fmt: PASS
+- go vet: PASS
+- go test: PASS
+- go build: PASS
+- 11/11 additional arithmetic HTTP checks: PASS
+- Domain coverage: 100.0%
+- HTTP coverage: 92.4%
+- Overall Go statement coverage: 87.8%
+
+FRONTEND:
+- TypeScript/Vite build: PASS
+- Vitest: 32/32 PASS
+- Statement coverage: 84.64%
+- Branch coverage: 74.14%
+- Function coverage: 97.36%
+- Line coverage: 87.67%
+- Browser-to-Go API communication verified.
+
+The previous Windows installation encountered missing native dependencies and a nonstandard npm script-shell configuration. These were addressed for candidate testing.
+
+IMPORTANT: Do not accept these summaries blindly. Cross-check the repository and distinguish independently observed results from candidate-reported verification.
+
+MISSION
+
+Make the existing solution submission-ready without overengineering it.
+
+PART 1 — REQUIREMENTS COMPLIANCE AUDIT
+
+Create a matrix mapping every mandatory Sezzle requirement to:
+- Actual implementation
+- Relevant files
+- Relevant automated tests
+- Remaining verification needs
+
+Confirm:
+- Four mandatory arithmetic operations
+- React frontend
+- Go REST backend
+- JSON responses
+- Input validation
+- Error handling
+- Responsive layout
+- Clean architecture
+- Tests in both layers
+- Coverage reporting
+- README documentation
+- AI prompt disclosure
+
+Clearly distinguish optional requirements.
+
+Do not implement optional arithmetic or Docker unless specifically approved.
+
+PART 2 — CODE QUALITY REVIEW
+
+Inspect the real source code for:
+
+Backend:
+- Arithmetic correctness
+- JSON validation
+- Appropriate HTTP statuses
+- Structured errors
+- Unexpected failure handling
+- Overflow and non-finite results
+- Go idioms
+- Unnecessary abstractions
+
+Frontend:
+- Correct API integration
+- React state consistency
+- Error handling and retry behavior
+- Stale-response protection
+- Accessibility
+- Keyboard interaction
+- Responsive CSS
+- TypeScript strictness
+- Unnecessary dependencies
+
+Classify findings as:
+BLOCKER
+SHOULD FIX
+OPTIONAL
+
+Fix only genuine blockers and justified small improvements.
+
+If a fix would require substantial redesign, explain it and stop for approval.
+
+Do not perform speculative refactoring.
+
+PART 3 — ENVIRONMENT AND REPRODUCIBILITY
+
+Inspect Node.js engine requirements and package versions.
+
+A previous Windows check used Node.js 22.20.0 but some dependencies require Node.js 22.22.2 or newer within the Node 22 line.
+
+Identify the actual minimum supported Node.js version from the installed dependency metadata.
+
+Document a compatible Node.js version in README.
+
+Do not silently change dependency versions or regenerate the lockfile.
+
+Verify that npm ci is the intended installation command and that npm scripts do not depend on the candidate's personal machine configuration.
+
+The candidate's Git Bash script-shell setting is an environment-specific issue, not a required project configuration.
+
+Do not introduce Windows-specific npm settings into the repository merely to solve the candidate's local configuration.
+
+Document any remaining limitations accurately.
+
+PART 4 — TESTING AND COVERAGE
+
+Run the available quality checks.
+
+Backend:
+go fmt ./...
+go vet ./...
+go test ./... -count=1 -cover
+go build ./...
+
+Frontend:
+npm ci --include=optional
+npm run build
+npm run test -- --coverage
+
+Run lint only if an actual lint script exists.
+
+If Go is unavailable in the agent environment, explicitly report NOT VERIFIED rather than claiming success.
+
+The candidate's independent verification may be reported separately.
+
+Do not fabricate test results or coverage.
+
+Ensure coverage can be reproduced from the documented commands.
+
+PART 5 — README
+
+Create a concise, professional README.md in English.
+
+Include:
+
+1. Project overview and scope
+2. Technology stack
+3. Small architecture overview
+4. Prerequisites and supported versions
+5. Backend installation and startup
+6. Frontend installation and startup
+7. How React connects to Go
+8. API documentation
+9. Successful curl example
+10. Division-by-zero error example
+11. Validation behavior
+12. Frontend and backend testing commands
+13. Coverage generation and measured results
+14. Design decisions
+15. Assumptions and limitations
+16. AI usage disclosure and link to PROMPTS.md
+
+Verify that all commands and examples match the actual repository.
+
+Explain:
+- Why Go was selected
+- Why React and TypeScript were selected
+- Why arithmetic is isolated from HTTP
+- Why React local state is sufficient
+- Why no database is required
+- Why REST fits the scope
+- Why optional features were not prioritized
+
+Mention IEEE-754 float64 limitations and explain why production financial monetary arithmetic should use appropriate decimal/fixed-point representations.
+
+Explain that the Vite proxy supports local development and does not automatically configure production routing.
+
+Do not call this application a deployed financial product.
+
+Keep the README focused and easy to follow.
+
+PART 6 — COVERAGE REPORT
+
+The assignment explicitly asks for a coverage report.
+
+Ensure that README contains:
+- Actual measured backend coverage
+- Actual measured frontend coverage
+- Reproducible coverage commands
+- An explanation of what is included and excluded
+
+If useful, create one concise human-readable coverage summary within the documentation.
+
+Do not commit generated coverage files, dependency directories, or build outputs unless there is a clear requirement to do so.
+
+PART 7 — AI PROMPT DISCLOSURE
+
+Review PROMPTS.md for completeness and historical accuracy.
+
+Preserve all verbatim original prompts and invocation messages.
+
+Ensure the initial abandoned local prototype is disclosed accurately. Do not silently omit relevant AI prompts from that earlier work.
+
+If earlier prompt content is unavailable in the current repository, report the limitation and request candidate input instead of inventing it.
+
+Correct only factual documentation errors or clearly identified formatting issues, without rewriting historical prompts.
+
+Ensure follow-up instructions are recorded accurately.
+
+Do not misrepresent AI-generated work as manually written.
+
+Distinguish:
+- AI implementation
+- AI-run verification
+- Candidate-run verification
+- AI-assisted source review
+
+Do not fabricate human contributions or claim that all tests passed in an environment where they could not be executed.
+
+PART 8 — REPOSITORY HYGIENE
+
+Check:
+- .gitignore
+- package-lock.json
+- go.mod
+- No secrets
+- No personal machine paths in runtime configuration
+- No node_modules
+- No generated binaries
+- No accidental coverage files
+- No stale or misleading documentation
+- No unfinished placeholders
+- No unnecessary dependencies
+
+Check the repository diff.
+
+Do not delete historical records or rewrite Git history.
+
+PART 9 — FINAL REPORT
+
+Provide:
+
+A. Mandatory requirements compliance matrix
+B. Findings and severity
+C. Files changed
+D. Commands actually executed and exact results
+E. Coverage summary
+F. README verification
+G. Prompt log verification
+H. Remaining limitations
+I. Git status
+J. Final candidate action checklist
+
+STOP CONDITIONS
+
+Do not:
+- Start a new application implementation
+- Add unrelated features
+- Implement optional Docker or advanced arithmetic
+- Rebuild the architecture
+- Commit automatically
+- Push to GitHub
+- Submit the assessment
+- Claim tests were performed when they were not
+
+Stop after the final audit and documentation preparation.
+
+Wait for candidate approval before publication.
+```
+
+### Planned invocation message
+
+```text
+Read ASSIGNMENT.md and PROMPTS.md. Execute only Phase 04 — Final Audit, Documentation and Submission Preparation. Preserve all original prompts and verification history. Review the code, prepare README.md, run available checks, update the Phase 04 results, and stop before committing, publishing, or submitting.
+```
+
+### Results log
+
+**Status:** AUDIT COMPLETE — Awaiting candidate approval
+
+**AI contribution:**
+
+- Audited the assignment, implementation, automated tests, dependency manifests, Git state, ignore rules, and all recorded verification history.
+- Created `README.md` with setup, architecture, API examples, validation behavior, test and coverage commands, measured results, design decisions, limitations, and AI-use disclosure.
+- Corrected the missing final newline in `.gitignore`; no application source, dependency version, lockfile, or module configuration was changed.
+
+#### A. Mandatory requirements compliance matrix
+
+| Requirement | Implementation | Files and automated tests | Remaining verification |
+| --- | --- | --- | --- |
+| Addition, subtraction, multiplication, division | All arithmetic is performed by the Go domain package; the React UI selects and submits each operation. | `backend/internal/calculator/calculator.go`, `calculator_test.go`; `frontend/src/App.tsx`, `App.test.tsx` | None identified. |
+| React frontend | React/TypeScript calculator with button and keyboard input, decimals, negatives, clear, backspace, loading, errors, and chaining. | `frontend/src/App.tsx`, `src/styles.css`; `App.test.tsx` | Candidate already verified the browser flow. |
+| Go REST backend | Standard-library HTTP server with health and calculate endpoints. | `backend/cmd/server/main.go`, `internal/httpapi/handler.go`; handler and calculator tests | Agent could not rerun Go commands because Go is unavailable; candidate results remain recorded separately. |
+| JSON responses | Success and error responses use JSON with stable shapes. | `handler.go`; `handler_test.go`; `frontend/src/api/calculator.ts`, `calculator.test.ts` | None identified. |
+| Input validation | Enforces JSON media type, one JSON object, known fields, present/non-null fields, exactly two finite numeric operands, supported operations, and a 1 MiB body limit. | `handler.go`, `calculator.go`; backend tests | None identified. |
+| Error handling | Structured HTTP errors cover malformed input, method/media/body limits, unsupported operations, division by signed zero, non-finite results, and unexpected failures; the UI safely classifies backend, proxy, network, and abort outcomes and supports retry. | `handler.go`, `frontend/src/api/calculator.ts`, `App.tsx`; both layers' tests | None identified. |
+| Responsive layout and accessibility | Responsive CSS, semantic buttons, visible focus, live status/error output, labels, and keyboard controls. | `frontend/src/styles.css`, `App.tsx`; `App.test.tsx` | Candidate already checked the responsive browser layout. |
+| Clean architecture | Arithmetic is transport-independent; HTTP, API-client, and UI concerns are separated without unnecessary frameworks or persistent storage. | `backend/internal/calculator`, `backend/internal/httpapi`, `frontend/src/api`, `frontend/src/App.tsx` | None identified. |
+| Tests in both layers | Go unit/handler tests and 32 frontend API/component tests. | `*_test.go`, `*.test.ts`, `*.test.tsx` | Backend not rerun in the agent environment. |
+| Coverage reporting | Reproducible commands and measured backend/frontend tables are documented. | `README.md`; prior Phase 02 and Phase 03 verification records | Generated reports stay ignored. |
+| README documentation | Professional English README now covers all requested setup, API, architecture, testing, decisions, and limitations. | `README.md` | Candidate review before submission. |
+| AI prompt disclosure | Original prompts, invocation messages, AI work, agent checks, candidate checks, and approvals remain recorded. | `PROMPTS.md`; README disclosure | Earlier abandoned prototype prompts are not present and require candidate input if they materially informed this solution. |
+
+Optional advanced arithmetic and Docker support were deliberately not implemented. They are not mandatory and were excluded by the Phase 04 prompt.
+
+#### B. Findings and severity
+
+- **BLOCKER:** No implementation blocker was found. Submission disclosure is incomplete only if the unavailable prompt log from the earlier abandoned prototype contains prompts that materially informed this repository; the candidate must supply those verbatim rather than reconstructing them.
+- **SHOULD FIX — completed:** Added the missing README, documented the actual Node engine floor from the lockfile, documented reproducible checks and measured coverage, and added the missing final newline to `.gitignore`.
+- **OPTIONAL — not changed:** A lint configuration, direct unit coverage for the thin server entrypoint, Docker, advanced operations, and production routing/deployment configuration could be added later but are not required for this assessment.
+- No speculative refactor or application-code change was justified by the review.
+
+#### C. Files changed in Phase 04
+
+- `README.md` — created.
+- `.gitignore` — final newline only.
+- `PROMPTS.md` — only the Phase 04 status and results log were updated; all original prompts and earlier verification records were preserved.
+
+#### D. Agent-run verification
+
+Backend commands were invoked from `backend/` and could not execute in this environment:
+
+| Command | Exact result |
+| --- | --- |
+| `go fmt ./...` | NOT VERIFIED — exit 127: `go: command not found` |
+| `go vet ./...` | NOT VERIFIED — exit 127: `go: command not found` |
+| `go test ./... -count=1 -cover` | NOT VERIFIED — exit 127: `go: command not found` |
+| `go build ./...` | NOT VERIFIED — exit 127: `go: command not found` |
+
+Frontend commands were executed from a clean temporary copy of the tracked frontend source and exact `package-lock.json`, using Node.js 22.23.3:
+
+| Command | Result |
+| --- | --- |
+| `npm ci --include=optional` | PASS — 116 packages installed from the lockfile |
+| `npm run build` | PASS — Vite 8.3.4 built 17 modules in 195 ms |
+| `npm run test -- --coverage` | PASS — 2 test files and 32/32 tests in 3.61 s |
+
+No lint command was run because no lint script exists. The lockfile was not regenerated. Dependency metadata was inspected and the strictest Node requirement is `^22.22.2 || ^24.15.0 || >=26.0.0`. Package and lockfile root dependencies match.
+
+#### E. Coverage summary
+
+Agent-reproduced frontend coverage: 84.64% statements (193/228), 74.14% branches (109/147), 97.36% functions (37/38), and 87.67% lines (185/211). `App.tsx` measured 82.29% / 67.82% / 96.66% / 85.71%; the API client measured 97.22% / 96.87% / 100% / 97.22%.
+
+The latest backend figures remain candidate-reported and independently recorded from Windows: calculator 100.0%, HTTP handlers 92.4%, server entrypoint 0.0%, and overall 87.8%. They were not reproduced by the agent in Phase 04 because the Go executable is unavailable.
+
+#### F. README verification
+
+The README commands and endpoints match the repository. It documents Go 1.22+, compatible Node branches (22.22.2+, 24.15.0+, or 26+), locked installation with optional native packages, backend/frontend startup, the development-only Vite proxy, API success and division-by-zero examples, validation/status behavior, reproducible checks, coverage scope, architecture choices, IEEE-754 limitations, production monetary-arithmetic guidance, optional-scope decisions, and AI usage.
+
+#### G. Prompt log verification
+
+The Phase 01–04 original prompts and invocation messages, Phase 03 follow-up, AI results, candidate verification, and approvals remain present. AI implementation, agent-run checks, candidate-run checks, and AI-assisted review are separately labeled. The disclosed earlier abandoned local prototype has no prompt text in this repository; those prompts were not invented. Candidate input is required if any were material to the submitted work.
+
+#### H. Remaining limitations
+
+- Binary `float64` arithmetic has IEEE-754 rounding behavior and is unsuitable for production monetary ledgers without explicit decimal/fixed-point rules.
+- The calculator has no expression parser, precedence, repeated-equals behavior, persistence, authentication, or history.
+- The Vite proxy is development-only; production hosting must separately route `/api` to Go and provide normal deployment controls.
+- Go checks remain unverified by the Phase 04 agent environment, though the earlier candidate verification records all four checks as passing.
+- Optional Docker and advanced operations remain intentionally omitted.
+
+#### I. Repository hygiene and Git status
+
+- No secrets, runtime personal-machine paths, unnecessary dependency additions, stale placeholders outside this Phase 04 record, or tracked generated outputs were found.
+- `node_modules`, frontend build/coverage output, and the backend coverage artifact are ignored.
+- `go.mod`, `package.json`, and `package-lock.json` are internally consistent; no dependency files changed in this phase.
+- Working tree after Phase 04: modified `.gitignore`, modified `PROMPTS.md`, and untracked `README.md`; ignored local artifacts remain under `backend/coverage`, `frontend/coverage/`, `frontend/dist/`, and `frontend/node_modules/`.
+- Git remote `origin` is configured for the candidate's GitHub repository. Its network accessibility was not tested, and no commit, push, publication, or submission was performed.
+
+#### J. Final candidate action checklist
+
+1. Review `README.md` and this Phase 04 audit.
+2. Provide and append any material prompts from the archived abandoned prototype verbatim, if applicable.
+3. Rerun the documented Go formatting, vet, test, and build commands in an environment with Go available.
+4. Optionally rerun the documented frontend clean install, build, and coverage test with a supported Node.js version.
+5. Inspect the final diff and confirm ignored generated artifacts are not staged.
+6. After approval, stage and commit the intended files, configure/confirm the remote, and push.
+7. Confirm repository visibility/link and the assessment deadline/time zone before submitting through the required channel.
+
+**Candidate-run verification:** No new candidate verification was performed during Phase 04. The prior Windows backend, frontend, browser-integration, and recovery results are preserved above and were treated as candidate-reported evidence.
+
+---
+
+## Phase 04 — Follow-up 01: Final README Professional Review
+
+**Date:** 2026-10-08
+**Tool:** OpenAI Codex
+**Status:** COMPLETE — Awaiting candidate approval
+
+### Why this follow-up was needed
+
+Phase 04 created the final README, but a focused professional review was requested to validate its stored Markdown, technical reproducibility, cross-platform examples, coverage claims, and AI disclosure before publication.
+
+### Original prompt (verbatim)
+
+```text
+
+You are acting as a senior software engineer performing a focused final documentation review of my Sezzle full-stack calculator take-home assessment.
+
+This is a follow-up to Phase 04. The implementation and final engineering audit are already complete.
+
+Your mission is to make the existing README.md professionally written, technically precise, reproducible, and ready for a software engineering reviewer.
+
+IMPORTANT: I do not want a new README written from scratch. Review and improve the existing document using targeted edits.
+
+READ FIRST:
+- ASSIGNMENT.md
+- README.md
+- PROMPTS.md
+- backend/go.mod
+- backend/cmd/server/main.go
+- backend/internal/calculator/calculator.go
+- backend/internal/httpapi/handler.go
+- frontend/package.json
+- frontend/package-lock.json
+- frontend/vite.config.ts
+- Relevant frontend source and tests
+
+VERIFIED PROJECT STATUS
+
+The candidate independently verified the following on Windows PowerShell:
+
+Backend:
+- go test ./... -count=1 -cover: PASS
+- go vet ./...: PASS
+- go build ./...: PASS
+- Calculator domain coverage: 100.0%
+- HTTP handler coverage: 92.4%
+- Overall Go coverage previously measured: 87.8%
+
+Frontend:
+- Build: PASS
+- Tests: 32/32 PASS
+- Statement coverage: 84.64%
+- Branch coverage: 74.14%
+- Function coverage: 97.36%
+- Line coverage: 87.67%
+
+The candidate also manually verified the browser-to-Go API communication, negative operands, decimals, keyboard behavior, errors, recovery, and responsive layout.
+
+Do not fabricate additional verification results.
+
+PART 1 — REVIEW README PROFESSIONALISM
+
+Review the README from the perspective of a senior technical reviewer evaluating a take-home assignment.
+
+The document should be:
+- Clear and concise.
+- Technically accurate.
+- Easy to reproduce on a clean machine.
+- Well organized.
+- Professional without excessive formality.
+- Natural in tone.
+- Focused on engineering decisions and actual functionality.
+- Free from generic promotional or exaggerated AI-generated language.
+
+Avoid:
+- Unnecessary buzzwords.
+- Self-congratulatory statements.
+- Repetitive explanations.
+- Excessively verbose architecture descriptions.
+- Claims unsupported by the implementation.
+- Internal drafting notes.
+- Unresolved TODOs presented as final documentation.
+- Statements written as instructions to the candidate.
+
+Do not attempt to conceal AI assistance. The assessment explicitly permits AI tools, and our AI usage disclosure must remain honest.
+
+Keep the README in English.
+
+PART 2 — CHECK ACTUAL MARKDOWN FORMATTING
+
+Inspect README.md as stored on disk.
+
+Confirm that:
+- Headings use valid Markdown syntax.
+- Lists render correctly.
+- Tables render correctly.
+- Code fences are valid.
+- Internal links work.
+- The README title is a proper H1.
+- No accidental literal backslashes or escaped Markdown markers were introduced.
+
+A previously shared text representation appeared to contain strings resembling "**# Heading**" and escaped code fences. This may have been caused by copying or rendering.
+
+Do NOT assume the actual README is malformed.
+
+Only fix formatting if the real file contains these defects.
+
+PART 3 — VALIDATE ALL TECHNICAL INSTRUCTIONS
+
+Cross-check README commands against the actual source code and configurations.
+
+Verify:
+1. The Go version declared in go.mod.
+2. The Node.js versions supported by the locked dependency graph.
+3. The correct backend startup command.
+4. The correct frontend installation and startup commands.
+5. The Vite development proxy target.
+6. The actual API endpoints.
+7. The supported operation identifiers.
+8. Request and response JSON formats.
+9. HTTP error status codes.
+10. Testing and coverage commands.
+
+Do not invent prerequisites or change application dependencies.
+
+The candidate's Windows environment had a custom npm script-shell setting pointing to Git Bash. This is a local machine configuration, not a project requirement.
+
+The README should use normal npm commands that work with a standard installation.
+
+The minimum Node.js version documented must satisfy the dependency engine constraints.
+
+PART 4 — CROSS-PLATFORM REPRODUCIBILITY
+
+Review the existing shell commands.
+
+Keep standard Bash commands where appropriate.
+
+Add one concise Windows PowerShell API request example using Invoke-RestMethod, since the candidate performed independent Windows verification.
+
+Ensure that the documented request uses:
+
+POST /api/v1/calculate
+
+Request:
+{"operation":"add","operands":[15,25]}
+
+Expected successful response:
+{"result":40}
+
+Also keep an example of division by zero with the actual backend error contract.
+
+Review the coverage commands:
+
+go test ./... -count=1 -coverprofile=coverage.out
+go tool cover -func=coverage.out
+
+These are legitimate Go command forms. Do not replace a valid command merely because a previous review speculated about syntax.
+
+If an actual command fails, document the failure and correct it based on evidence.
+
+If documenting a custom backend PORT, clarify that the Vite proxy must target the corresponding port. The default development configuration expects port 8080.
+
+PART 5 — REVIEW COVERAGE AND CLAIMS
+
+Ensure all reported metrics match the verified results:
+
+Backend:
+- Calculator: 100.0%
+- HTTP handlers: 92.4%
+- Overall: 87.8%
+- Server entrypoint: 0.0%
+
+Frontend:
+- Statements: 84.64%
+- Branches: 74.14%
+- Functions: 97.36%
+- Lines: 87.67%
+
+Keep the distinction between package-level and overall coverage.
+
+Explain the untested server entrypoint briefly and accurately.
+
+Do not present test coverage as proof that every possible edge case has been tested.
+
+PART 6 — DESIGN DECISIONS AND LIMITATIONS
+
+Preserve the important explanations:
+- Go standard library for the backend.
+- Arithmetic domain separated from HTTP transport.
+- React with TypeScript.
+- Local React state rather than additional state-management libraries.
+- REST/JSON integration.
+- No database because the calculator is stateless.
+- Optional operations and Docker deliberately omitted to prioritize mandatory requirements.
+- IEEE-754 float64 limitations.
+- Development-only Vite proxy.
+- No full expression parser or mathematical precedence.
+
+Make these explanations concise and engineering-focused.
+
+Do not add features to justify documentation claims.
+
+PART 7 — AI DISCLOSURE AND HISTORICAL ACCURACY
+
+Review the final AI disclosure in README.md.
+
+The disclosure should state that AI tools assisted with:
+- Architecture exploration.
+- Implementation.
+- Automated tests.
+- Error-handling improvements.
+- Code review.
+- Documentation.
+
+Link clearly to PROMPTS.md.
+
+The README currently contains an unresolved instruction telling the candidate to append historical prototype prompts before submission.
+
+This is not appropriate wording for a finalized README.
+
+Handle it as follows:
+
+1. Inspect PROMPTS.md for the existing disclosure of the abandoned prototype.
+2. Preserve all original historical entries.
+3. Do not invent or reconstruct unavailable prompts.
+4. If the original prototype prompts are not available in this workspace, retain an accurate, concise historical note in PROMPTS.md explaining the limitation.
+5. Replace the README's internal TODO-like instruction with a short factual disclosure that accurately reflects the actual prompt record.
+6. If full historical disclosure cannot be confirmed, explicitly flag it in your final report for candidate review.
+
+Never claim that all historical prompts are included when they are not.
+
+PART 8 — AI PROMPT LOGGING
+
+PROMPTS.md is our authoritative AI-assisted development record.
+
+Append a new section:
+
+"Phase 04 — Follow-up 01: Final README Professional Review"
+
+Record this instruction as the complete original prompt, verbatim, together with the actual invocation and results.
+
+Preserve all earlier prompts, follow-ups, approvals, and verification records.
+
+Do not rewrite or summarize historical prompts.
+
+Document:
+- Why the follow-up was needed.
+- Exactly what changed.
+- Technical inaccuracies corrected.
+- Commands actually executed.
+- Checks that could not be executed.
+- Remaining candidate actions.
+
+Keep all logs factual.
+
+PART 9 — SCOPE CONTROL
+
+Allowed changes:
+- README.md
+- PROMPTS.md
+
+Do not change:
+- React source code.
+- Go source code.
+- Tests.
+- package.json.
+- package-lock.json.
+- go.mod.
+- .gitignore.
+- Architecture.
+- Application functionality.
+
+If you discover a genuine implementation blocker that cannot be addressed through documentation alone, report it and ask for approval rather than modifying application code.
+
+Do NOT:
+- Add optional arithmetic operations.
+- Add Docker.
+- Redesign the frontend.
+- Commit.
+- Push.
+- Create GitHub releases.
+- Submit the assessment.
+
+PART 10 — FINAL QUALITY CHECK
+
+After editing, perform:
+
+1. Review README.md for Markdown consistency.
+2. Verify documented commands against the actual source files.
+3. Check for broken relative links.
+4. Check for placeholder text and unresolved drafting instructions.
+5. Confirm previous PROMPTS.md records remain unchanged.
+6. Run git diff --check.
+7. Inspect git diff -- README.md PROMPTS.md.
+
+Run lightweight documentation validation where available.
+
+Do not rerun the entire application test suite unless an observed documentation inconsistency justifies it.
+
+Do not claim unexecuted checks passed.
+
+FINAL RESPONSE
+
+Provide:
+
+A. Overall README assessment before the edits.
+B. Specific issues found and fixed.
+C. Files modified.
+D. Summary of before/after improvements.
+E. Technical commands and examples verified.
+F. AI prompt disclosure status.
+G. Remaining blockers or limitations.
+H. Git working-tree status.
+I. Whether the README is ready for candidate approval and GitHub publication.
+
+STOP after completing the documentation improvements.
+
+Do not commit or push. Wait for my final review.
+```
+
+### Invocation message (verbatim)
+
+```text
+IMPLE.MD LEE Y EJKECUTA
+```
+
+### Results log
+
+**Status:** COMPLETE — Awaiting candidate approval
+
+**Files modified:**
+
+- `README.md` — targeted documentation corrections only.
+- `PROMPTS.md` — appended only this follow-up record.
+
+**Changes made:**
+
+- Confirmed the stored README already used a valid H1, headings, lists, tables, code fences, and relative links; no literal escaped-heading or escaped-fence defect existed.
+- Clarified that a custom backend `PORT` also requires the checked-in Vite proxy target to be changed from its default port 8080.
+- Added a concise Windows PowerShell `Invoke-RestMethod` example for `POST /api/v1/calculate`, using the required add request and showing the expected `{"result":40}` response.
+- Replaced the README's candidate-facing historical-prompt instruction with a concise factual disclosure: an earlier abandoned prototype is recorded, but its separate prompt content is unavailable in this workspace and was not reconstructed.
+- Preserved the documented setup, API contract, error statuses, coverage metrics, design decisions, and limitations because they match the implementation and verified records.
+
+**Technical validation:**
+
+- `backend/go.mod` declares Go 1.22; `go run ./cmd/server` matches the server package.
+- The default backend port and Vite proxy both use 8080.
+- `/health` and `/api/v1/calculate`, the four operation identifiers, JSON contracts, body limit, and documented error statuses match the Go handlers and tests.
+- `npm ci --include=optional`, `npm run dev`, `npm run build`, and `npm run test -- --coverage` match `package.json` and the locked dependency workflow.
+- Lockfile inspection confirmed the strictest Node.js engine constraint is `^22.22.2 || ^24.15.0 || >=26.0.0`.
+- Coverage figures remain unchanged: backend calculator 100.0%, handlers 92.4%, entrypoint 0.0%, overall 87.8%; frontend statements 84.64%, branches 74.14%, functions 97.36%, and lines 87.67%.
+
+**Commands and checks executed:**
+
+- Read the instruction, assignment, README, prompt log, Go module/source/tests, frontend manifest/lockfile/configuration/source/tests, and responsive CSS with `sed` and `rg`.
+- Inspected dependency engine metadata and the packages imposing the strictest Node.js constraint with `jq`.
+- Checked the README H1 and balanced fenced-code blocks with `awk`; result: one H1 and 40 fence markers.
+- Checked that the relative `PROMPTS.md` and `ASSIGNMENT.md` link targets exist.
+- Searched the README for accidental escaped Markdown, placeholders, and candidate-facing drafting instructions; none remained.
+- Inspected `git diff -- README.md PROMPTS.md` and the complete untracked README diff.
+- Verified the complete embedded follow-up prompt against `IMPLE.MD` after normalizing line endings; both SHA-256 values were `427ef2a70be0f9e39959e0d740b012fbf3c56352101e709982d26ba33a24679b`.
+- Verified the first 1,914 lines of `PROMPTS.md` retained their pre-follow-up SHA-256 value, confirming that earlier records were unchanged.
+- Ran `git diff --check`; it reported only the three preserved Markdown hard-break lines in the existing Phase 04 metadata (`PROMPTS.md` lines 1513–1515). Those historical lines were not rewritten, and the new README/follow-up content introduced no whitespace error.
+
+**Checks not executed:**
+
+- No application build or test suite was rerun because no implementation or command inconsistency justified it; the verified results above were not represented as new test runs.
+- The PowerShell example was not executed because `pwsh` is unavailable in this environment; it was reviewed against standard `Invoke-RestMethod` syntax and the implemented API contract.
+- No Markdown linter was available; structural Markdown checks were performed with the available command-line tools.
+
+**Remaining candidate actions:**
+
+- Review and approve the final README wording and rendered appearance.
+- Review the historical prototype disclosure; the unavailable archived prompt content remains a known limitation and was not invented.
+- After approval, inspect the final working-tree diff before choosing whether to commit and publish.
+
+No source code, tests, dependency manifests, lockfiles, module configuration, `.gitignore`, architecture, or application behavior was changed. No commit, push, release, publication, or submission was performed.
