@@ -10,3 +10,5 @@ coverage.out
 .vscode/
 .idea/
 .DS_Store
+backend/coverage
+backend/coverage.out

@@ -20,7 +20,7 @@ Sezzle explicitly permits AI-assisted development and requests the prompts used.
 | Phase | Scope | Status |
 | --- | --- | --- |
 | 01 | Requirements and architecture | Approved — 2026-10-08 |
-| 02 | Go backend and tests | Not started |
+| 02 | Go backend and tests | Approved — 2026-10-08 |
 | 03 | React frontend and tests | Not started |
 | 04 | Integration, review, docs and submission | Not started |
 
@@ -287,3 +287,405 @@ The candidate reviewed the proposed architecture, API contract, frontend interac
 Phase 01 is approved for Go backend implementation only. This approval does not imply that the backend has been implemented or tested.
 
 The original Phase 01 prompt, invocation message, and results log remain unchanged.
+
+---
+
+## Phase 02 — Go Backend and Tests
+
+**Date:** 2026-10-08
+**Tool:** OpenAI Codex
+**Status:** APPROVED — 2026-10-08
+**Scope:** Backend implementation and automated verification only
+
+### Objective
+
+Implement a small, clean, idiomatic Go REST calculator service using the approved Phase 01 design.
+
+### Original prompt (verbatim)
+
+```text
+You are a senior Go engineer implementing Phase 02 of the Sezzle full-stack calculator take-home assessment.
+
+Read ASSIGNMENT.md, the Phase 01 architecture proposal, the Candidate Review and Approval, and this Phase 02 prompt in PROMPTS.md before modifying application code.
+
+The previous phase has been approved with clarifications. Follow those decisions. If a genuine contradiction or implementation blocker is found, report it and stop instead of silently changing the approved design.
+
+This is a time-boxed 2–4 hour assessment. Prioritize correctness, readable idiomatic Go, maintainability, and meaningful tests. Avoid overengineering.
+
+1. IMPLEMENTATION SCOPE
+
+Implement ONLY the Go backend.
+
+Mandatory operations:
+- add
+- subtract
+- multiply
+- divide
+
+Each operation accepts exactly two finite numeric operands.
+
+Do not implement optional arithmetic operations in this phase.
+
+Use Go standard-library packages unless a dependency has a compelling justification.
+
+Do not create any React frontend, Docker configuration, database, authentication, queues, or unnecessary infrastructure.
+
+2. PROJECT STRUCTURE
+
+Use this minimal organization:
+
+backend/
+  go.mod
+  cmd/server/main.go
+  internal/calculator/calculator.go
+  internal/calculator/calculator_test.go
+  internal/httpapi/handler.go
+  internal/httpapi/handler_test.go
+
+Introduce additional files only for genuine maintainability reasons.
+
+The calculator package must not depend on net/http or the HTTP transport layer.
+
+3. DOMAIN IMPLEMENTATION
+
+Implement deterministic calculator operations.
+
+Validate:
+- supported operation
+- exactly two operands
+- finite input numbers
+- division by positive or negative zero
+- non-finite results caused by overflow or invalid arithmetic
+
+Use clear, idiomatic Go error values or equivalent simple error handling.
+
+Do not use a large interface hierarchy, dependency injection framework, or speculative abstraction.
+
+The calculation function must be independently testable.
+
+4. HTTP CONTRACT
+
+Expose:
+
+POST /api/v1/calculate
+
+Request:
+{"operation":"add","operands":[10,5]}
+
+Success, HTTP 200:
+{"result":15}
+
+GET /health
+
+Success, HTTP 200:
+{"status":"ok"}
+
+Use consistent JSON error responses:
+
+{"error":{"code":"division_by_zero","message":"Cannot divide by zero"}}
+
+Follow these approved HTTP rules:
+
+- 400 invalid_request: malformed JSON, missing required fields, incorrect data types, invalid operand count, or non-representable input numbers.
+- 415 unsupported_media_type: Content-Type is not application/json.
+- 413 request_too_large: request exceeds the configured size limit, if a size limit is implemented.
+- 422 unsupported_operation: unknown calculator operation.
+- 422 division_by_zero: denominator is positive or negative zero.
+- 422 non_finite_result: arithmetic result is not finite.
+- 405 method_not_allowed: unsupported method, including a suitable Allow header.
+- 500 internal_error: unexpected server errors.
+
+Use these documented error codes consistently in the API and tests. Do not invent alternative code naming conventions.
+
+For validation:
+- Reject malformed or empty JSON.
+- Reject trailing JSON values.
+- Reject unknown fields.
+- Reject absent or null required fields.
+- Reject null array elements: do not silently decode null operands as numeric zero.
+- Reject strings or booleans used instead of numeric operands.
+- Reject arrays with too few or too many operands.
+- Reject numbers outside float64 representation.
+
+Do not introduce unnecessarily complex validation libraries.
+
+Use encoding/json and net/http appropriately.
+
+Do not expose internal error details in generic HTTP 500 responses.
+
+Keep the server port configurable using PORT, defaulting to 8080.
+
+Use reasonable server timeouts without adding production infrastructure beyond this exercise.
+
+5. TEST-DRIVEN VERIFICATION
+
+Implement meaningful automated tests as the domain and handlers are completed, rather than writing all tests at the end.
+
+Domain tests should cover:
+- each mandatory operation
+- negative numbers
+- decimal operands
+- positive and negative zero
+- division by zero
+- invalid operand counts
+- unsupported operation
+- non-finite input operands
+- overflow and non-finite results
+
+Use Go table-driven tests where appropriate.
+
+HTTP handler tests should cover:
+- health endpoint
+- successful arithmetic responses
+- exact JSON result contract
+- structured error responses
+- expected HTTP status codes
+- malformed JSON
+- unknown fields
+- extra JSON values
+- missing fields
+- null operands, including null array entries
+- incorrect JSON types
+- unsupported operation
+- division by zero
+- arithmetic overflow
+- wrong HTTP method
+- unsupported media type
+- oversized requests, if a request size limit exists
+
+Use net/http/httptest and the standard Go testing package.
+
+Prefer meaningful assertions over superficial coverage inflation.
+
+6. EXECUTE QUALITY CHECKS
+
+After implementation, actually execute the following from backend/:
+
+go fmt ./...
+go vet ./...
+go test ./... -cover
+go build ./...
+
+If a command fails, identify and fix the underlying defect and rerun it.
+
+Do not claim a test or build passed without seeing the actual command output.
+
+If Go cannot be executed in the agent environment, report the limitation accurately and provide the exact commands for the candidate to execute in Windows PowerShell.
+
+Report coverage separately for the calculator, HTTP handlers, and main package.
+
+Do not invent coverage percentages.
+
+7. MANUAL HTTP VERIFICATION
+
+If the environment allows it, start the actual HTTP server and exercise:
+- GET /health
+- POST add with [15,25] producing 40
+- POST divide with [10,0] producing an HTTP 422 JSON error
+
+If real server execution is unavailable, mark these manual integration tests NOT VERIFIED.
+
+The candidate will independently verify the server afterward.
+
+8. PROMPT RECORDING
+
+PROMPTS.md is the authoritative AI assistance record.
+
+Do not overwrite or reformat the entire file.
+
+Preserve all existing Phase 01 content, original prompts, invocation messages, and candidate approval.
+
+Preserve this Phase 02 original prompt and invocation exactly.
+
+Modify only the Phase 02 status and Results log, and the Phase 02 status cell in the development timeline.
+
+Record:
+- what files were created
+- relevant engineering decisions
+- actual commands executed
+- real test and coverage results
+- verification limitations
+- any substantive additional AI prompts used
+
+Do not claim the candidate performed manual verification that has not been reported.
+
+Do not fabricate prompts, test results, or human decisions.
+
+9. STOP CONDITION
+
+Stop after Go backend implementation and automated verification.
+
+Do not implement React.
+Do not create the final README.
+Do not create Docker configuration.
+Do not commit, push, or publish the repository.
+Do not proceed to Phase 03 without the candidate's approval.
+
+FINAL RESPONSE
+
+Provide:
+A. Requirements compliance summary
+B. Files created
+C. API and validation behavior
+D. Test results and actual command outputs
+E. Coverage by package
+F. Known limitations
+G. Commands for independent Windows verification
+H. PROMPTS.md changes and Git status
+
+Then STOP.
+```
+
+### Planned invocation message
+
+The following exact message will be sent to Codex. It becomes historical evidence only after execution.
+
+```text
+Read ASSIGNMENT.md and PROMPTS.md. Execute only Phase 02 — Go Backend and Tests according to its complete original prompt. Preserve all previous phases and prompts. Update only the Phase 02 status and results log. Stop before frontend implementation, Git commits, or publication.
+```
+
+### Results log
+
+**Status:** Backend implementation complete; automated and manual runtime verification remain pending because no executable Go toolchain is available in the agent environment.
+
+**AI contribution:**
+
+- Created only the approved Go backend structure: `backend/go.mod`, `backend/cmd/server/main.go`, `backend/internal/calculator/calculator.go`, `backend/internal/calculator/calculator_test.go`, `backend/internal/httpapi/handler.go`, and `backend/internal/httpapi/handler_test.go`.
+- Implemented independently testable `add`, `subtract`, `multiply`, and `divide` domain logic with validation for exactly two operands, non-finite operands, positive/negative zero division, unsupported operations, and non-finite results.
+- Implemented `POST /api/v1/calculate` and `GET /health` with standard-library HTTP/JSON packages, the approved error codes and status mappings, `Allow` headers, a configurable `PORT` defaulting to `8080`, and server read/header/write/idle timeouts.
+- Added strict request validation for `application/json`, a 1 MiB body limit, malformed/empty/trailing JSON, unknown fields, absent/null fields, null array entries, incorrect types, invalid operand counts, and numbers outside `float64` representation.
+- Added table-driven domain tests and `httptest` handler tests covering the required success and error behavior, including HTTP 413 and 415.
+- Did not create frontend, README, Docker, database, authentication, queues, commits, or publication artifacts. No substantive additional AI prompts were used beyond the recorded Phase 02 invocation.
+
+**Engineering decisions:**
+
+- Kept calculation rules in a transport-independent package and used simple sentinel errors rather than interfaces or dependency-injection layers.
+- Represented decoded required fields and operand entries with pointers so absent/null values cannot silently become empty strings or numeric zero.
+- Used `json.Decoder.DisallowUnknownFields`, a second decode requiring `io.EOF`, and `http.MaxBytesReader` to keep validation strict without a validation dependency.
+- Chose a 1 MiB request limit, sufficient for a two-number request while giving the approved `request_too_large` behavior.
+- Kept error messages safe and stable; unexpected internal errors map to `500 internal_error` without exposing details.
+
+**Agent-run verification:**
+
+- Confirmed by source inspection that only the six planned backend files were created and no frontend or deployment directories exist.
+- Checked backend files for trailing whitespace; none was reported.
+- Located Windows Go at `C:\\Program Files\\Go\\bin\\go.exe`, but this Linux execution environment cannot run Windows binaries; direct execution failed with `Exec format error`.
+- Attempted every required command from `backend/`. Each exited with code `127` and `/bin/bash: line 1: go: command not found`:
+  - `go fmt ./...`
+  - `go vet ./...`
+  - `go test ./... -cover`
+  - `go build ./...`
+- Automated tests, compilation, vet, gofmt verification, and real-server HTTP checks are therefore **NOT VERIFIED** by the agent.
+
+**Coverage by package:**
+
+- `sezzle-calculator/backend/internal/calculator`: Not measured; Go could not execute.
+- `sezzle-calculator/backend/internal/httpapi`: Not measured; Go could not execute.
+- `sezzle-calculator/backend/cmd/server`: Not measured; Go could not execute.
+
+No coverage percentage is claimed.
+
+**Candidate-run verification:** Not performed or reported. From Windows PowerShell at the repository root, run:
+
+```powershell
+Set-Location .\backend
+go version
+go fmt ./...
+go vet ./...
+go test ./... -cover
+go build ./...
+
+# Produce and inspect a coverage profile, then show each package separately.
+go test ./... -coverprofile=coverage.out
+go tool cover -func=coverage.out
+go test ./internal/calculator -cover
+go test ./internal/httpapi -cover
+go test ./cmd/server -cover
+```
+
+For independent HTTP verification, keep the following server running in one PowerShell window:
+
+```powershell
+Set-Location .\backend
+$env:PORT = "8080"
+go run ./cmd/server
+```
+
+Then run in another PowerShell window from the repository root:
+
+```powershell
+curl.exe -i http://localhost:8080/health
+curl.exe -i -H "Content-Type: application/json" --data-raw '{"operation":"add","operands":[15,25]}' http://localhost:8080/api/v1/calculate
+curl.exe -i -H "Content-Type: application/json" --data-raw '{"operation":"divide","operands":[10,0]}' http://localhost:8080/api/v1/calculate
+```
+
+Expected results are HTTP 200 with `{"status":"ok"}`, HTTP 200 with `{"result":40}`, and HTTP 422 with `{"error":{"code":"division_by_zero","message":"Cannot divide by zero"}}`, respectively. These expectations have not yet been independently observed.
+
+**Known issues and limitations:**
+
+- The backend has not been compiled, formatted by `go fmt`, vetted, tested, measured for coverage, or exercised through a real server in the agent environment. Candidate verification is required before Phase 02 approval.
+- Arithmetic uses `float64`; it can exhibit binary floating-point rounding and is not suitable for exact monetary calculations.
+- Optional operations, frontend integration, final documentation, Docker, graceful shutdown, and deployment are outside this phase.
+
+**PROMPTS.md and Git status:** Updated only the Phase 02 timeline status, Phase 02 status, and this Results log. All previous-phase content and both Phase 02 prompt/invocation text were preserved. At completion, `PROMPTS.md` is modified and `backend/` is untracked; no commit, push, or publication was performed.
+
+**Verification clarification:** The limitation above
+applies only to the Codex execution environment.
+
+The candidate subsequently compiled, tested, and ran
+the Go backend independently using Windows PowerShell.
+
+All Go formatting, vet, test, and build checks passed.
+Live HTTP verification also passed, including 11/11
+additional arithmetic cases.
+
+See the Candidate Verification and Approval section
+below for the actual results.
+
+### Candidate Verification and Approval — 2026-10-08
+
+**Decision:** APPROVED for frontend integration.
+
+The candidate independently verified the backend on Windows using Go 1.24.1 and PowerShell.
+
+#### Automated verification
+
+| Check | Actual result |
+| --- | --- |
+| go fmt ./... | PASS |
+| go vet ./... | PASS |
+| go test ./... -count=1 -cover | PASS |
+| go build ./... | PASS |
+| Coverage profile generation | PASS |
+| Calculator domain coverage | 100.0% |
+| HTTP handler coverage | 92.4% |
+| Server entrypoint coverage | 0.0% (not directly tested) |
+
+The initial function-level coverage display command returned "too many arguments". The coverage profile itself was generated successfully.
+
+#### Live HTTP verification
+
+| Test | Observed result |
+| --- | --- |
+| GET /health | PASS — status ok |
+| Addition [15,25] | PASS — 40 |
+| Division by zero [10,0] | PASS — HTTP 422, division_by_zero |
+| Null operand [10,null] | PASS — HTTP 400, invalid_request |
+
+#### Additional arithmetic verification
+
+The candidate executed 11 real HTTP arithmetic tests covering addition, subtraction, multiplication, division, negative operands, decimals, and zero.
+
+**Result: 11/11 PASS.**
+
+#### Source review
+
+The candidate supplied the calculator domain, HTTP handler, and server entrypoint for an AI-assisted source-code review. No obvious blocking defects were identified in the inspected files.
+
+#### Decision
+
+The backend is approved for frontend integration based on successful automated tests, build checks, live HTTP verification, and source review.
+
+Optional arithmetic and deployment infrastructure remain outside the approved scope.
+
+All original prompts and invocation messages remain unchanged.
